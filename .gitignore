@@ -1,2 +1,5 @@
 # Ignore vagrant folder
 .vagrant
+
+# JetBrains
+.idea

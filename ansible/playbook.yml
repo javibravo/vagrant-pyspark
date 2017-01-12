@@ -50,3 +50,5 @@
       pip: name=pytest
     - name: Install find findspark
       pip: name=findspark
+    - name: Install boto3
+      pip: name=boto3
