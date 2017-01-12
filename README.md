@@ -13,11 +13,11 @@ It is intended to be used only for development and testing with small data sets.
 ## How to use
 
 ### Clone your projects
-Set up the Vagrant box and clone your projects inside to run you jobs and tests.
+Set up the Vagrant box and clone your projects inside to run your jobs and tests.
 
 ### Sync you projects folder
-You can fork this repo and extend the Vagrant file to sync your project folders
-in the Vagrant box. It will allow you to have all your changes immediatally 
+You can fork this repo and extend the Vagrant file to sync your projects
+folder in the Vagrant box. It will allow you to have all your changes immediately
 available to run in the Vagrant box.
 
 ```ruby
@@ -25,7 +25,7 @@ config.vm.synced_folder "/Project/path/in/host/machine", "/Destination/in/vagran
 ```
 
 ### Copy this project
-You can copy this project inside you Spark project and have all together.
+You can copy this project inside your Spark project and have all together.
 
 ## PySpark Unit Testing
 You can find good explanation and examples [here](https://github.com/kawadia/pyspark.test)
