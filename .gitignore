@@ -3,3 +3,6 @@
 
 # JetBrains
 .idea
+
+# Ignore logs
+*.log
