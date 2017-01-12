@@ -18,6 +18,8 @@
       apt: update_cache=yes
     - name: Install Java 7 JDK
       apt: name=openjdk-7-jre-headless state=present
+    - name: Install Git
+      apt: name=git state=present
 
     - name: Create downloads directory
       file: state=directory path={{ downloads_directory }}
@@ -39,6 +41,8 @@
       command: mv {{ downloads_directory }}/spark-1.6.3-bin-hadoop2.6 {{ spark.install_directory }}
     - name: "add {{ spark.bin_directory }} to PATH"
       lineinfile: dest=/etc/environment state=present backrefs=yes regexp='PATH=(["]*)((?!.*?{{spark.bin_directory}}).*?)(["]*)$' line="PATH=\1\2:{{ spark.bin_directory }}\3"
+    - name: Set SPARK_HOME
+      lineinfile: dest=/etc/environment state=present regexp='^SPARK_HOME' line="SPARK_HOME={{ spark.install_directory }}"
 
     - name: Install pip
       apt: name={{item}} state=installed
