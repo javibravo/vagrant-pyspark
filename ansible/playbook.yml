@@ -5,13 +5,11 @@
   vars:
     downloads_directory: "{{ ansible_env.HOME }}/downloads"
     scala:
-      download_url: http://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.tgz
-      install_directory: /usr/local/scala
-      bin_directory: /usr/local/scala/bin
+      version: 2.11.8
     spark:
-      download_url: http://d3kbcqa49mib13.cloudfront.net/spark-1.6.3-bin-hadoop2.6.tgz
-      install_directory: /usr/local/spark
-      bin_directory: /usr/local/spark/bin
+      version: 1.6.3
+    hadoop:
+      version: 2.6
 
   tasks:
     - name: Update server
@@ -24,23 +22,19 @@
     - name: Create downloads directory
       file: state=directory path={{ downloads_directory }}
 
-    - name: Download Scala 2.11.8
-      get_url: url={{ scala.download_url }} dest={{ downloads_directory }}
-    - name: Extract Scala 2.11.8
-      unarchive: src={{ downloads_directory }}/scala-2.11.8.tgz dest={{ downloads_directory }} copy=no
+    - name: Extract Scala {{ scala.version }}
+      unarchive: src=http://downloads.lightbend.com/scala/{{ scala.version }}/scala-{{ scala.version }}.tgz dest={{ downloads_directory }} copy=no
     - name: Move Scala to install directory
-      command: mv {{ downloads_directory }}/scala-2.11.8 {{ scala.install_directory }}
-    - name: "add {{ scala.bin_directory }} to PATH"
-      lineinfile: dest=/etc/environment state=present backrefs=yes regexp='PATH=(["]*)((?!.*?{{scala.bin_directory}}).*?)(["]*)$' line="PATH=\1\2:{{ scala.bin_directory }}\3"
+      command: mv {{ downloads_directory }}/scala-{{ scala.version }} /usr/local/scala
+    - name: Add Scala to PATH
+      lineinfile: dest=/etc/environment state=present backrefs=yes regexp='PATH=(["]*)((?!.*?/usr/local/scala/bin).*?)(["]*)$' line='PATH=\1\2:/usr/local/scala/bin\3'
 
-    - name: Download Spark 1.6.3
-      get_url: url={{ spark.download_url }} dest={{ downloads_directory }}
-    - name: Extract Spark 1.6.3
-      unarchive: src={{ downloads_directory }}/spark-1.6.3-bin-hadoop2.6.tgz dest={{ downloads_directory }} copy=no
+    - name: Extract Spark {{ spark.version }} with hadoop {{ hadoop.version }}
+      unarchive: src=http://d3kbcqa49mib13.cloudfront.net/spark-{{ spark.version }}-bin-hadoop{{ hadoop.version }}.tgz dest={{ downloads_directory }} copy=no
     - name: Move Spark to install directory
-      command: mv {{ downloads_directory }}/spark-1.6.3-bin-hadoop2.6 {{ spark.install_directory }}
-    - name: "add {{ spark.bin_directory }} to PATH"
-      lineinfile: dest=/etc/environment state=present backrefs=yes regexp='PATH=(["]*)((?!.*?{{spark.bin_directory}}).*?)(["]*)$' line="PATH=\1\2:{{ spark.bin_directory }}\3"
+      command: mv {{ downloads_directory }}/spark-{{ spark.version }}-bin-hadoop{{ hadoop.version }} /usr/local/spark
+    - name: Add Spark to PATH
+      lineinfile: dest=/etc/environment state=present backrefs=yes regexp='PATH=(["]*)((?!.*?/usr/local/spark/bin).*?)(["]*)$' line="PATH=\1\2:/usr/local/spark/bin\3"
     - name: Set SPARK_HOME
       lineinfile: dest=/etc/environment state=present regexp='^SPARK_HOME' line="SPARK_HOME={{ spark.install_directory }}"
 
