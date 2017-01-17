@@ -36,7 +36,7 @@
     - name: Add Spark to PATH
       lineinfile: dest=/etc/environment state=present backrefs=yes regexp='PATH=(["]*)((?!.*?/usr/local/spark/bin).*?)(["]*)$' line="PATH=\1\2:/usr/local/spark/bin\3"
     - name: Set SPARK_HOME
-      lineinfile: dest=/etc/environment state=present regexp='^SPARK_HOME' line="SPARK_HOME={{ spark.install_directory }}"
+      lineinfile: dest=/etc/environment state=present regexp='^SPARK_HOME' line='SPARK_HOME=/usr/local/spark'
 
     - name: Install pip
       apt: name={{item}} state=installed

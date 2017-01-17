@@ -1,8 +1,11 @@
-# Ignore vagrant folder
+# vagrant folder
 .vagrant
 
 # JetBrains
 .idea
 
-# Ignore logs
+# logs
 *.log
+
+# Ansible retry
+ansible/playbook.retry
