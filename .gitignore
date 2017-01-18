@@ -9,3 +9,5 @@
 
 # Ansible retry
 ansible/playbook.retry
+# Ansible variables
+ansible/variables.yml
