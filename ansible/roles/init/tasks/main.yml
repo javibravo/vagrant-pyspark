@@ -1,0 +1,6 @@
+---
+
+- name: Update server
+  apt: update_cache=yes
+- name: Create downloads directory
+  file: state=directory path={{ downloads_directory }}

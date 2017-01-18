@@ -1,0 +1,14 @@
+---
+
+- name: Install python tools
+  apt: name={{item}} state=installed
+  with_items:
+    - python-pip
+    - python-dev
+    - build-essential
+- name: Install pytest
+  pip: name=pytest
+- name: Install find findspark
+  pip: name=findspark
+- name: Install boto3
+  pip: name=boto3

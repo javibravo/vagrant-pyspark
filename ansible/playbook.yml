@@ -11,42 +11,10 @@
     hadoop:
       version: 2.6
 
-  tasks:
-    - name: Update server
-      apt: update_cache=yes
-    - name: Install Java 7 JDK
-      apt: name=openjdk-7-jre-headless state=present
-    - name: Install Git
-      apt: name=git state=present
-
-    - name: Create downloads directory
-      file: state=directory path={{ downloads_directory }}
-
-    - name: Extract Scala {{ scala.version }}
-      unarchive: src=http://downloads.lightbend.com/scala/{{ scala.version }}/scala-{{ scala.version }}.tgz dest={{ downloads_directory }} copy=no
-    - name: Move Scala to install directory
-      command: mv {{ downloads_directory }}/scala-{{ scala.version }} /usr/local/scala
-    - name: Add Scala to PATH
-      lineinfile: dest=/etc/environment state=present backrefs=yes regexp='PATH=(["]*)((?!.*?/usr/local/scala/bin).*?)(["]*)$' line='PATH=\1\2:/usr/local/scala/bin\3'
-
-    - name: Extract Spark {{ spark.version }} with hadoop {{ hadoop.version }}
-      unarchive: src=http://d3kbcqa49mib13.cloudfront.net/spark-{{ spark.version }}-bin-hadoop{{ hadoop.version }}.tgz dest={{ downloads_directory }} copy=no
-    - name: Move Spark to install directory
-      command: mv {{ downloads_directory }}/spark-{{ spark.version }}-bin-hadoop{{ hadoop.version }} /usr/local/spark
-    - name: Add Spark to PATH
-      lineinfile: dest=/etc/environment state=present backrefs=yes regexp='PATH=(["]*)((?!.*?/usr/local/spark/bin).*?)(["]*)$' line="PATH=\1\2:/usr/local/spark/bin\3"
-    - name: Set SPARK_HOME
-      lineinfile: dest=/etc/environment state=present regexp='^SPARK_HOME' line='SPARK_HOME=/usr/local/spark'
-
-    - name: Install pip
-      apt: name={{item}} state=installed
-      with_items:
-        - python-pip
-        - python-dev
-        - build-essential
-    - name: Install pytest
-      pip: name=pytest
-    - name: Install find findspark
-      pip: name=findspark
-    - name: Install boto3
-      pip: name=boto3
+  roles:
+    - init
+    - jdk
+    - git
+    - scala
+    - spark
+    - python_tools

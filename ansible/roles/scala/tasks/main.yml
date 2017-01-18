@@ -1,0 +1,11 @@
+---
+
+- name: Extract Scala {{ scala.version }}
+  unarchive: src=http://downloads.lightbend.com/scala/{{ scala.version }}/scala-{{ scala.version }}.tgz
+             dest={{ downloads_directory }} copy=no
+- name: Move Scala to install directory
+  command: mv {{ downloads_directory }}/scala-{{ scala.version }} /usr/local/scala
+- name: Add Scala to PATH
+  lineinfile: dest=/etc/environment state=present backrefs=yes
+              regexp='PATH=(["]*)((?!.*?/usr/local/scala/bin).*?)(["]*)$'
+              line='PATH=\1\2:/usr/local/scala/bin\3'
