@@ -6,9 +6,11 @@
     - python-pip
     - python-dev
     - build-essential
-- name: Install pytest
+- name: Install python pytest
   pip: name=pytest
-- name: Install find findspark
+- name: Install python mock
+  pip: name=mock
+- name: Install python findspark
   pip: name=findspark
-- name: Install boto3
+- name: Install python boto3
   pip: name=boto3
